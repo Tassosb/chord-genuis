@@ -13,10 +13,14 @@ class Chord
   # from Chord shape and IntervalGroup
 
   def frets
-    @frets ||= fretboard.locate_chord(self)
+    @frets ||= fretboard.generate_chord_frets(self)
+    raise MissingFretsError.new('chord does not fit') unless @frets
+    @frets
   end
 
   def root_string_number
     shape.root_string
   end
+
+  class MissingFretsError < StandardError; end
 end

@@ -17,19 +17,13 @@ class Fretboard
 
   # given a fret position, knows the note
 
-  def locate_chord(chord)
-    root_note = chord.root
+  def generate_chord_frets(chord)
     root_string = strings[chord.root_string_number]
+    possible_root_frets = root_string.locate_note chord.root
 
-    possible_root_frets = root_string.locate_note root_note
-
-    frets = []
-    possible_root_frets.each do |root_fret|
-      anchored_frets = anchored_frets chord.shape, root_fret
-      frets.push anchored_frets if on_board? anchored_frets
-    end
-
-    frets
+    possible_root_frets.map do |root_fret|
+      anchored_frets chord.shape, root_fret
+    end.find { |frets| on_board? frets }
   end
 
   private

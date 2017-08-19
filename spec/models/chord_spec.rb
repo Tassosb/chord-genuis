@@ -12,8 +12,8 @@ RSpec.describe Chord do
         let(:note) { Note::A }
 
         it 'returns the correct frets' do
-          expect(chord.frets).to contain_exactly(
-            [5, 7, 7, 6, 5, 5], [17, 19, 19, 18, 17, 17]
+          expect(chord.frets).to eq(
+            [5, 7, 7, 6, 5, 5]
           )
         end
       end
@@ -22,8 +22,8 @@ RSpec.describe Chord do
         let(:note) { Note::G }
 
         it 'returns the correct frets' do
-          expect(chord.frets).to contain_exactly(
-            [3, 5, 5, 4, 3, 3], [15, 17, 17, 16, 15, 15]
+          expect(chord.frets).to eq(
+            [3, 5, 5, 4, 3, 3]
           )
         end
       end
@@ -36,8 +36,8 @@ RSpec.describe Chord do
         let(:note) { Note::D }
 
         it 'returns the correct frets' do
-          expect(chord.frets).to contain_exactly(
-            [nil, 5, 7, 7, 7, 5], [nil, 17, 19, 19, 19, 17]
+          expect(chord.frets).to eq(
+            [nil, 5, 7, 7, 7, 5]
           )
         end
       end
@@ -46,10 +46,19 @@ RSpec.describe Chord do
         let(:note) { Note::C }
 
         it 'returns the correct frets' do
-          expect(chord.frets).to contain_exactly(
-            [nil, 3, 5, 5, 5, 3], [nil, 15, 17, 17, 17, 15]
+          expect(chord.frets).to eq(
+            [nil, 3, 5, 5, 5, 3]
           )
         end
+      end
+    end
+
+    context 'when the chord shape does not fit' do
+      let(:shape) { ChordShape.new(root_string: 0, frets: [30, 5, 1, 6, nil, 2]) }
+      let(:note) { Note::C }
+
+      it 'raises' do
+        expect { chord.frets }.to raise_error Chord::MissingFretsError
       end
     end
   end
