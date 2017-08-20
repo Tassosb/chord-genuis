@@ -6,18 +6,12 @@ class Fretboard
     @strings ||= Fretboard.generate_strings(tuning)
   end
 
-  def [](pos)
-    string_idx, fret_idx = pos
-    strings[string_idx][fret_idx]
+  def note_at(string: 0, fret: nil)
+    return nil if fret.blank?
+    strings[string][fret]
   end
-  # has many strings
 
-  # belongs_to a tuning
-  # has many notes based on tuning, each note has a position
-
-  # given a fret position, knows the note
-
-  def generate_chord_frets(chord)
+  def find_chord_frets(chord)
     root_string = strings[chord.root_string_number]
     possible_root_frets = root_string.locate_note chord.root
 

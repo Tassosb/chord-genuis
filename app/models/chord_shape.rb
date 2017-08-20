@@ -19,6 +19,18 @@ class ChordShape < ActiveHash::Base
       frets: [nil, 0, 2, 2, 2, 0],
       root_string: 1,
       interval_group: IntervalGroup::MAJOR
+    },
+    {
+      name: 'Root 6 Minor',
+      frets: [0, 2, 2, 0, 0, 0],
+      root_string: 0,
+      interval_group: IntervalGroup::MINOR
+    },
+    {
+      name: 'Root 5 Minor',
+      frets: [nil, 0, 2, 2, 1, 0],
+      root_string: 1,
+      interval_group: IntervalGroup::MINOR
     }
   ]
 

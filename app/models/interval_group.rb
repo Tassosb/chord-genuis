@@ -4,20 +4,21 @@ class IntervalGroup < ActiveHash::Base
   enum_accessor :name
 
   belongs_to :abstract_scale
+
   has_many :chord_shapes
-
-  # belongs to an abstract Scale
-
-  # has many intervals
-    # e.g. 1 3 5
-
-  # name / type
-    # e.g. name: 'Major Triad'
 
   fields :name, :intervals, :abstract_scale
 
   self.data = [
-    name: 'Major', intervals: [1, 3, 5], abstract_scale: AbstractScale::MAJOR
+    { name: 'Major',
+      intervals: [Interval::FIRST, Interval::THIRD, Interval::FIFTH],
+      abstract_scale: AbstractScale::MAJOR,
+    },
+    {
+      name: 'Minor',
+      intervals: [Interval::FIRST, Interval::FLAT_THIRD, Interval::FIFTH],
+      abstract_scale: AbstractScale::MINOR
+    }
   ]
 
 end

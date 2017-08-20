@@ -4,6 +4,30 @@ RSpec.describe Chord do
   let(:fretboard) { Fretboard.new(tuning: Tuning::STANDARD) }
   let(:chord) { Chord.new(root: note, fretboard: fretboard, shape: shape) }
 
+  describe '#notes' do
+    context 'root 6 E major' do
+      let(:shape) { ChordShape::ROOT_6_MAJOR }
+      let(:note) { Note::E }
+
+      it 'returns the notes in the chord by string' do
+        expect(chord.notes).to eq(
+          [Note::E, Note::B, Note::E, Note::G_SHARP, Note::B, Note::E]
+        )
+      end
+    end
+
+    context 'the chord has a nil fret' do
+      let(:shape) { ChordShape::ROOT_5_MINOR }
+      let(:note) { Note::A }
+
+      it 'returns the notes in the chord without nil values' do
+        expect(chord.notes).to eq(
+          [Note::A, Note::E, Note::A, Note::C, Note::E]
+        )
+      end
+    end
+  end
+
   describe '#frets' do
     context 'Root 6 Major Chords' do
       let(:shape) { ChordShape::ROOT_6_MAJOR }
@@ -53,12 +77,51 @@ RSpec.describe Chord do
       end
     end
 
-    context 'when the chord shape does not fit' do
-      let(:shape) { ChordShape.new(root_string: 0, frets: [30, 5, 1, 6, nil, 2]) }
-      let(:note) { Note::C }
+    context 'Root 6 Minor Chords' do
+      let(:shape) { ChordShape::ROOT_6_MINOR }
 
-      it 'raises' do
-        expect { chord.frets }.to raise_error Chord::MissingFretsError
+      context 'F minor' do
+        let(:note) { Note::F }
+
+        it 'returns the correct frets lowest on the fretboard' do
+          expect(chord.frets).to eq(
+            [1, 3, 3, 1, 1, 1]
+          )
+        end
+      end
+
+      context 'G minor' do
+        let(:note) { Note::G }
+
+        it 'returns the correct frets' do
+          expect(chord.frets).to eq(
+            [3, 5, 5, 3, 3, 3]
+          )
+        end
+      end
+    end
+
+    context 'Root 5 Minor Chords' do
+      let(:shape) { ChordShape::ROOT_5_MINOR }
+
+      context 'B flat minor' do
+        let(:note) { Note::B_FLAT }
+
+        it 'returns the correct frets lowest on the fretboard' do
+          expect(chord.frets).to eq(
+            [nil, 1, 3, 3, 2, 1]
+          )
+        end
+      end
+
+      context 'C minor' do
+        let(:note) { Note::C }
+
+        it 'returns the correct frets' do
+          expect(chord.frets).to eq(
+            [nil, 3, 5, 5, 4, 3]
+          )
+        end
       end
     end
   end

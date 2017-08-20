@@ -11,8 +11,8 @@ class Note < ActiveHash::Base
     {name: 'B flat', order: 1},
     {name: 'B', order: 2},
     {name: 'C flat', order: 2},
-    {name: 'B sharp', order: 3},
     {name: 'C', order: 3},
+    {name: 'B sharp', order: 3},
     {name: 'C sharp', order: 4},
     {name: 'D flat', order: 4},
     {name: 'D', order: 5},
@@ -20,8 +20,8 @@ class Note < ActiveHash::Base
     {name: 'E flat', order: 6},
     {name: 'E', order: 7},
     {name: 'F flat', order: 7},
-    {name: 'E sharp', order: 8},
     {name: 'F', order: 8},
+    {name: 'E sharp', order: 8},
     {name: 'F sharp', order: 9},
     {name: 'G flat', order: 9},
     {name: 'G', order: 10},
@@ -36,10 +36,14 @@ class Note < ActiveHash::Base
 
   def distance_to(other_note)
     if other_note.order < order
-      (Constants::NUM_NOTES - other_note.order) - order
+      (Constants::NUM_NOTES - order) + other_note.order
     else
       other_note.order - order
     end
+  end
+
+  def ==(other_note)
+    order == other_note.order
   end
 
   # def initialize(value, octave)
