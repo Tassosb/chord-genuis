@@ -1,7 +1,6 @@
 class DynamicChord
   include ActiveModel::Model
-
-  MAX_FRET_GAP = 3
+  include Frettable
 
   attr_accessor :interval_group, :frets, :root
   attr_reader :fretboard
@@ -51,44 +50,10 @@ class DynamicChord
     end.sort_by { |chord| chord.notes.count * -1 }
   end
 
-  def has_no_duplicate_notes?
-    pitch_set = Set.new
-    notes.each do |note|
-      return false if pitch_set.include?(note&.pitch)
-      pitch_set.add(note&.pitch)
-    end
-    true
-  end
-
-  def notes
-    @notes ||= frets.map.with_index do |fret, string|
-      fretboard.note_at string: string, fret: fret
-    end
-  end
-
-  def abstract_notes
-    notes.map { |note| note&.abstract_note }
-  end
-
-  def within_reach?(new_fret)
-    new_fret.zero? ||
-      frets.compact.all? do |fret|
-        fret.zero? || (new_fret - fret).abs < MAX_FRET_GAP
-      end
-  end
-
   def add_fret(fret, string)
     @frets = @frets.dup
     @frets[string] = fret
     self
-  end
-
-  def triad?
-    notes.count == 3
-  end
-
-  def movable?
-    frets.compact.none?(&:zero?)
   end
 
   def root_string

@@ -61,18 +61,4 @@ class ChordShape < ActiveHash::Base
   def fret_at_root
     frets[root_string]
   end
-
-  # def self.generate(interval_group)
-  #
-  # end
-
-  # frets => [[1,0], [2,0], [3,1], [4,2], [5,2], [6,0]]
-
-  # root => [1,0]
-
-  # validate number of frets, within number of strings
-
-  # belongs to an Interval Group
-    #e.g. IntervalGroup<intervals: 1, 3, 5, name: 'Major'>
-  # delegate :name, to: IntervalGroup
 end

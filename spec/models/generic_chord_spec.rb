@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Chord do
+RSpec.describe GenericChord do
   let(:fretboard) { Fretboard.new(tuning: Tuning::STANDARD) }
-  let(:chord) { Chord.new(root: note, fretboard: fretboard, shape: shape) }
+  let(:chord) { GenericChord.new(root: note, fretboard: fretboard, shape: shape) }
 
   describe '#abstract_notes' do
     context 'root 6 E major' do
@@ -27,9 +27,10 @@ RSpec.describe Chord do
       let(:shape) { ChordShape::ROOT_5_MINOR }
       let(:note) { AbstractNote::A }
 
-      it 'returns the notes in the chord without nil values' do
+      it 'returns the notes in the chord with nil values' do
         expect(chord.abstract_notes).to eq(
           [
+            nil,
             AbstractNote::A,
             AbstractNote::E,
             AbstractNote::A,
