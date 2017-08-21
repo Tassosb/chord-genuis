@@ -4,26 +4,39 @@ RSpec.describe Chord do
   let(:fretboard) { Fretboard.new(tuning: Tuning::STANDARD) }
   let(:chord) { Chord.new(root: note, fretboard: fretboard, shape: shape) }
 
-  describe '#notes' do
+  describe '#abstract_notes' do
     context 'root 6 E major' do
       let(:shape) { ChordShape::ROOT_6_MAJOR }
-      let(:note) { Note::E }
+      let(:note) { AbstractNote::E }
 
       it 'returns the notes in the chord by string' do
-        expect(chord.notes).to eq(
-          [Note::E, Note::B, Note::E, Note::G_SHARP, Note::B, Note::E]
+        expect(chord.abstract_notes).to eq(
+          [
+            AbstractNote::E,
+            AbstractNote::B,
+            AbstractNote::E,
+            AbstractNote::G_SHARP,
+            AbstractNote::B,
+            AbstractNote::E
+          ]
         )
       end
     end
 
     context 'the chord has a nil fret' do
       let(:shape) { ChordShape::ROOT_5_MINOR }
-      let(:note) { Note::A }
+      let(:note) { AbstractNote::A }
 
       it 'returns the notes in the chord without nil values' do
-        expect(chord.notes).to eq(
-          [Note::A, Note::E, Note::A, Note::C, Note::E]
-        )
+        expect(chord.abstract_notes).to eq(
+          [
+            AbstractNote::A,
+            AbstractNote::E,
+            AbstractNote::A,
+            AbstractNote::C,
+            AbstractNote::E
+          ]
+         )
       end
     end
   end
@@ -33,7 +46,7 @@ RSpec.describe Chord do
       let(:shape) { ChordShape::ROOT_6_MAJOR }
 
       context 'root 6 A major' do
-        let(:note) { Note::A }
+        let(:note) { AbstractNote::A }
 
         it 'returns the correct frets' do
           expect(chord.frets).to eq(
@@ -43,7 +56,7 @@ RSpec.describe Chord do
       end
 
       context 'root 6 G major' do
-        let(:note) { Note::G }
+        let(:note) { AbstractNote::G }
 
         it 'returns the correct frets' do
           expect(chord.frets).to eq(
@@ -57,7 +70,7 @@ RSpec.describe Chord do
       let(:shape) { ChordShape::ROOT_5_MAJOR }
 
       context 'root 5 D major' do
-        let(:note) { Note::D }
+        let(:note) { AbstractNote::D }
 
         it 'returns the correct frets' do
           expect(chord.frets).to eq(
@@ -67,7 +80,7 @@ RSpec.describe Chord do
       end
 
       context 'root 5 F major' do
-        let(:note) { Note::C }
+        let(:note) { AbstractNote::C }
 
         it 'returns the correct frets' do
           expect(chord.frets).to eq(
@@ -81,7 +94,7 @@ RSpec.describe Chord do
       let(:shape) { ChordShape::ROOT_6_MINOR }
 
       context 'F minor' do
-        let(:note) { Note::F }
+        let(:note) { AbstractNote::F }
 
         it 'returns the correct frets lowest on the fretboard' do
           expect(chord.frets).to eq(
@@ -91,7 +104,7 @@ RSpec.describe Chord do
       end
 
       context 'G minor' do
-        let(:note) { Note::G }
+        let(:note) { AbstractNote::G }
 
         it 'returns the correct frets' do
           expect(chord.frets).to eq(
@@ -105,7 +118,7 @@ RSpec.describe Chord do
       let(:shape) { ChordShape::ROOT_5_MINOR }
 
       context 'B flat minor' do
-        let(:note) { Note::B_FLAT }
+        let(:note) { AbstractNote::B_FLAT }
 
         it 'returns the correct frets lowest on the fretboard' do
           expect(chord.frets).to eq(
@@ -115,11 +128,39 @@ RSpec.describe Chord do
       end
 
       context 'C minor' do
-        let(:note) { Note::C }
+        let(:note) { AbstractNote::C }
 
         it 'returns the correct frets' do
           expect(chord.frets).to eq(
             [nil, 3, 5, 5, 4, 3]
+          )
+        end
+      end
+    end
+
+    context 'Root 6 Suspended 4th Chords' do
+      let(:shape) { ChordShape::ROOT_6_SUSPENDED_4TH }
+
+      context 'Dsus4' do
+        let(:note) { AbstractNote::D }
+
+        it 'returns the correct frets lowest on the fretboard' do
+          expect(chord.frets).to eq(
+            [10, 12, 12, 12, 10, 10]
+          )
+        end
+      end
+    end
+
+    context 'Root 5 Suspended 4th Chords' do
+      let(:shape) { ChordShape::ROOT_5_SUSPENDED_4TH }
+
+      context 'Csus4' do
+        let(:note) { AbstractNote::C }
+
+        it 'returns the correct frets lowest on the fretboard' do
+          expect(chord.frets).to eq(
+            [nil, 3, 5, 5, 6, 3]
           )
         end
       end

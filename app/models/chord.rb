@@ -3,10 +3,6 @@ class Chord
 
   attr_accessor :shape, :root, :fretboard
 
-  # chord_shape => ChordShape<name: 'Major'>
-
-  # this can be rendered
-
   def frets
     @frets ||= fretboard.find_chord_frets(self)
   end
@@ -17,9 +13,11 @@ class Chord
     end.compact
   end
 
+  def abstract_notes
+    notes.map(&:abstract_note)
+  end
+
   def root_string_number
     shape.root_string
   end
-
-  class MissingFretsError < StandardError; end
 end

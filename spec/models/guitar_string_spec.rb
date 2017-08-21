@@ -2,26 +2,37 @@ require "rails_helper"
 
 RSpec.describe GuitarString do
   subject { GuitarString.new(open_note: open_note) }
-  let(:open_note) { Note::E }
+  let(:open_note) do
+    Note.new(
+      abstract_note: AbstractNote::E,
+      pitch: -14
+    )
+  end
 
   describe '#[]' do
     it 'returns the note at the input fret' do
-      expect(subject[3]).to eq Note::G
-      expect(subject[11]).to eq Note::D_SHARP
+      expect(subject[3].pitch).to eq -11
+      expect(subject[3].abstract_note).to eq AbstractNote::G
     end
 
     context 'when wrapping around the alphabet' do
       it 'returns the correct note' do
-        expect(subject[14]).to eq Note::F_SHARP
+        expect(subject[14].abstract_note).to eq AbstractNote::F_SHARP
+        expect(subject[14].pitch).to eq 0
       end
     end
   end
 
-  describe '#locate_note' do
+  describe '#locate_notes' do
     before { stub_const('Constants::NUM_FRETS', 24) }
+    let(:notes) { [AbstractNote::C, AbstractNote::G, AbstractNote::E] }
 
-    it 'returns the fret numbers with the given note' do
-      expect(subject.locate_note Note::G).to contain_exactly 3, 15
+    it 'returns the frets with the given notes' do
+      note_frets = subject.locate_notes(notes)
+      frets = note_frets.map { |note_fret| note_fret[:fret] }
+      expect(frets).to contain_exactly(
+        8, 3, 0, 20, 15, 12, 24
+      )
     end
   end
 end

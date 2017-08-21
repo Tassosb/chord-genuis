@@ -11,13 +11,27 @@ class IntervalGroup < ActiveHash::Base
 
   self.data = [
     { name: 'Major',
+      abbreviation: 'maj',
       intervals: [Interval::FIRST, Interval::THIRD, Interval::FIFTH],
       abstract_scale: AbstractScale::MAJOR,
     },
     {
       name: 'Minor',
+      abbreviation: 'min',
       intervals: [Interval::FIRST, Interval::FLAT_THIRD, Interval::FIFTH],
       abstract_scale: AbstractScale::MINOR
+    },
+    {
+      name: 'Suspended 4th',
+      abbreviation: 'sus4',
+      intervals: [Interval::FIRST, Interval::FOURTH, Interval::FIFTH],
+      abstract_scale: AbstractScale::MAJOR
+    },
+    {
+      name: 'Suspended 2nd',
+      abbreviation: 'sus4',
+      intervals: [Interval::FIRST, Interval::SECOND, Interval::FIFTH],
+      abstract_scale: AbstractScale::MAJOR
     }
   ]
 
