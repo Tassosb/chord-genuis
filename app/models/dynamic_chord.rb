@@ -17,17 +17,17 @@ class DynamicChord
 
     fretboard = Fretboard.new
     strings = fretboard.strings
-    note_frets_by_string = fretboard.frets_by_string_and_note(abstract_notes)
+    frets_by_string = fretboard.frets_by_string(abstract_notes)
 
     chords = []
 
-    strings.each_with_index do |string, num_string|
-      frets = note_frets_by_string[string].map { |nf| nf[:fret] }
+    strings.each do |string|
+      frets = frets_by_string[string]
 
-      if num_string < 3
+      if string.number < 3
         new_chords = frets.map do |fret|
           new_chord = DynamicChord.new(root: root)
-          new_chord.add_fret(fret, num_string)
+          new_chord.add_fret(fret, string.number)
         end
       else
         new_chords = []
@@ -37,7 +37,7 @@ class DynamicChord
         frets_within_reach = frets.select { |f| chord.within_reach?(f) }
 
         frets_within_reach.each do |fret|
-          new_chords.push(chord.dup.add_fret(fret, num_string))
+          new_chords.push(chord.dup.add_fret(fret, string.number))
         end
       end
 

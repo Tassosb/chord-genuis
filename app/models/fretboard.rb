@@ -17,16 +17,15 @@ class Fretboard
     strings.map(&:open_note)
   end
 
-  def frets_by_string_and_note(notes)
+  def frets_by_string(abstract_notes)
     strings.each_with_object({}) do |string, acc|
-      acc[string] = string.locate_notes(notes)
+      acc[string] = string.locate_notes(abstract_notes)
     end
   end
 
   def find_chord_frets(chord)
     root_string = strings[chord.root_string_number]
     possible_root_frets = root_string.locate_notes([chord.root])
-                                     .map { |note_fret| note_fret[:fret] }
 
     possible_root_frets.map do |root_fret|
       anchored_frets chord.shape, root_fret
@@ -50,7 +49,7 @@ class Fretboard
     current_pitch = tuning.lowest_note.pitch
     current_abstract_note = tuning.lowest_note.abstract_note
 
-    tuning.notes.map do |note_name|
+    tuning.notes.map.with_index do |note_name, num|
       open_abstract_note = AbstractNote.find_by(name: note_name)
       current_pitch += current_abstract_note.distance_to(open_abstract_note)
 
@@ -60,7 +59,7 @@ class Fretboard
       )
 
       current_abstract_note = open_abstract_note
-      GuitarString.new(open_note: open_note)
+      GuitarString.new(open_note: open_note, number: num)
     end
   end
 end
