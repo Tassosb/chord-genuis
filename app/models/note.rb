@@ -19,6 +19,7 @@ class Note
   end
 
   def ==(other_note)
+    return false unless other_note.is_a? Note
     pitch == other_note.pitch
   end
 end

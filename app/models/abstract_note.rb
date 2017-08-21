@@ -47,6 +47,7 @@ class AbstractNote < ActiveHash::Base
   end
 
   def ==(other_note)
+    return false unless other_note.is_a? AbstractNote
     relative_pitch == other_note.relative_pitch
   end
 end

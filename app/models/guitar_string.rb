@@ -16,12 +16,13 @@ class GuitarString
 
   def locate_notes(abstract_notes)
     frets = abstract_notes.map do |abs_note|
+      new_fret = open_note.abstract_note.distance_to(abs_note)
       new_note = Note.new(
         abstract_note: abs_note,
-        pitch: open_note.pitch + open_note.abstract_note.distance_to(abs_note)
+        pitch: open_note.pitch + new_fret
       )
 
-      {note: new_note, fret: open_note.abstract_note.distance_to(abs_note)}
+      {note: new_note, fret: new_fret}
     end
 
     results = frets.dup

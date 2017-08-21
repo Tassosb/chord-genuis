@@ -54,8 +54,8 @@ class DynamicChord
   def has_no_duplicate_notes?
     pitch_set = Set.new
     notes.each do |note|
-      return false if pitch_set.include?(note.pitch)
-      pitch_set.add(note.pitch)
+      return false if pitch_set.include?(note&.pitch)
+      pitch_set.add(note&.pitch)
     end
     true
   end
@@ -63,11 +63,11 @@ class DynamicChord
   def notes
     @notes ||= frets.map.with_index do |fret, string|
       fretboard.note_at string: string, fret: fret
-    end.compact
+    end
   end
 
   def abstract_notes
-    notes.map(&:abstract_note)
+    notes.map { |note| note&.abstract_note }
   end
 
   def within_reach?(new_fret)
@@ -85,5 +85,13 @@ class DynamicChord
 
   def triad?
     notes.count == 3
+  end
+
+  def movable?
+    frets.compact.none?(&:zero?)
+  end
+
+  def root_string
+    abstract_notes.index(root)
   end
 end
