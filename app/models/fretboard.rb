@@ -8,8 +8,7 @@ class Fretboard
     @strings ||= Fretboard.generate_strings(tuning)
   end
 
-  def note_at(string: 0, fret: nil)
-    return nil if fret.blank?
+  def note_at(string, fret)
     strings[string][fret]
   end
 
@@ -17,19 +16,22 @@ class Fretboard
     strings.map(&:open_note)
   end
 
-  def frets_by_string(abstract_notes)
+  def frets_by_string(note_letters)
     strings.each_with_object({}) do |string, acc|
-      acc[string] = string.locate_notes(abstract_notes)
+      acc[string] = string.locate_notes(note_letters)
     end
   end
 
-  def find_chord_frets(chord)
-    root_string = strings[chord.root_string_number]
-    possible_root_frets = root_string.locate_notes([chord.root])
+  def chord_frets(root, shape)
+    root_string_number = strings[shape.root_string_number]
+    possible_root_frets = root_string_number.locate_notes([root])
 
-    possible_root_frets.map do |root_fret|
-      anchored_frets chord.shape, root_fret
-    end.find { |frets| on_board? frets }
+    possible_root_frets.each do |root_fret|
+      frets = anchored_frets shape, root_fret
+      return frets if on_board? frets
+    end
+
+    nil
   end
 
   private
@@ -47,18 +49,18 @@ class Fretboard
 
   def self.generate_strings(tuning)
     current_pitch = tuning.lowest_note.pitch
-    current_abstract_note = tuning.lowest_note.abstract_note
+    current_note_letter = tuning.lowest_note.note_letter
 
     tuning.notes.map.with_index do |note_name, num|
-      open_abstract_note = AbstractNote.find_by(name: note_name)
-      current_pitch += current_abstract_note.distance_to(open_abstract_note)
+      open_note_letter = NoteLetter.find_by(name: note_name)
+      current_pitch += current_note_letter.distance_to(open_note_letter)
 
       open_note = Note.new(
-        abstract_note: open_abstract_note,
+        note_letter: open_note_letter,
         pitch: current_pitch
       )
 
-      current_abstract_note = open_abstract_note
+      current_note_letter = open_note_letter
       GuitarString.new(open_note: open_note, number: num)
     end
   end

@@ -6,12 +6,12 @@ module Frettable
   included do
     def notes
       @notes ||= frets.map.with_index do |fret, string|
-        fretboard.note_at string: string, fret: fret
+        fret && fretboard.note_at(string, fret)
       end
     end
 
-    def abstract_notes
-      notes.map { |note| note&.abstract_note }
+    def note_letters
+      notes.map { |note| note&.note_letter }
     end
 
     def has_no_duplicate_notes?
@@ -36,6 +36,12 @@ module Frettable
         frets.compact.all? do |fret|
           fret.zero? || (new_fret - fret).abs < MAX_FRET_GAP
         end
+    end
+
+    def inspect
+      'name: ' + root.name + interval_group.abbreviation +
+      ' frets: ' + frets.map { |f| f ? f : 'X' }.join(' | ') +
+      ' notes: ' + notes.compact.map(&:name).join(' , ')
     end
   end
 

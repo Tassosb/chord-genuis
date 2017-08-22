@@ -1,4 +1,4 @@
-class AbstractNote < ActiveHash::Base
+class NoteLetter < ActiveHash::Base
   include ActiveHash::Enum
 
   enum_accessor :name
@@ -30,12 +30,12 @@ class AbstractNote < ActiveHash::Base
   ]
 
   def self.[](rel_pitch)
-    AbstractNote.find_by(relative_pitch: rel_pitch)
+    NoteLetter.find_by(relative_pitch: rel_pitch)
   end
 
   def step(distance)
     next_relative_pitch = (relative_pitch + distance) % Constants::NUM_NOTES
-    AbstractNote.find_by(relative_pitch: next_relative_pitch)
+    NoteLetter.find_by(relative_pitch: next_relative_pitch)
   end
 
   def distance_to(other_note)
@@ -46,8 +46,14 @@ class AbstractNote < ActiveHash::Base
     end
   end
 
+  def relative_note_letters(intervals)
+    intervals.map do |interval|
+      self.step interval.degree
+    end
+  end
+
   def ==(other_note)
-    return false unless other_note.is_a? AbstractNote
+    return false unless other_note.is_a? NoteLetter
     relative_pitch == other_note.relative_pitch
   end
 end

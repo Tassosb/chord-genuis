@@ -9,10 +9,10 @@ class Tuning < ActiveHash::Base
   ]
 
   def lowest_note
-    abstract_note = AbstractNote.find_by(name: notes.first)
+    note_letter = NoteLetter.find_by(name: notes.first)
     Note.new(
-      abstract_note: abstract_note,
-      pitch: abstract_note.relative_pitch * starting_octave
+      note_letter: note_letter,
+      pitch: note_letter.relative_pitch * starting_octave
     )
   end
 end
