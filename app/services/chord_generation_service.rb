@@ -13,7 +13,7 @@ class ChordGenerationService
 
     @interval_group = params[:interval_group]
     @fretboard = params[:fretboard]
-    @min_chord_notes = params[:min_chord_notes] || MIN_CHORD_NOTES
+    @min_chord_notes = params[:min_chord_notes]
     @root_note_letter = params[:root_note_letter]
   end
 
@@ -26,7 +26,7 @@ class ChordGenerationService
 
       if string.number < 3
         new_chords = frets.map do |fret|
-          new_chord = DynamicChord.new(
+          new_chord = Chord.new(
             root: root_note_letter,
             interval_group: interval_group,
             fretboard: fretboard

@@ -13,7 +13,7 @@ class Chord
 
   def initialize(attributes = {})
     super
-    @frets ||= DynamicChord.default_frets
+    @frets ||= Chord.default_frets
   end
 
   def self.default_frets
